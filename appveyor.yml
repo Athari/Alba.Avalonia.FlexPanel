@@ -34,7 +34,7 @@ deploy:
 - provider: NuGet
   server: https://www.myget.org/F/athari/api/v2/package
   api_key:
-    secure: JFNRqMPyhqt4e1ga2ad6jSF1K+Nhmsepo0nwRMga05kRGOFtY297hV0iGNQSVa6l
+    secure: exjvOVQvyAc6tYMZ9B0AOXheLn0HyMhltk1HC5J5rsXqaxjQP5F1R8RrixKlGrdI
   artifact: NuGetDebug
   on:
     configuration: Debug
@@ -44,3 +44,4 @@ deploy:
   artifact: NuGetRelease
   on:
     configuration: Release
+    appveyor_repo_tag: true

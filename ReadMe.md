@@ -1,6 +1,15 @@
 # Alba.Avalonia.FlexPanel
 
+[![NuGet release version](https://img.shields.io/nuget/v/Alba.Avalonia.FlexPanel.svg?label=release&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMpJREFUeNqUkbENwjAQRY8ovZkgG5AJYALS0GaDMAGeACYIE7ABtFSZgEyAy3TegG/pR7IuToCTXuHTvTufvTo8h42InIAFTn6MDARxCwr5I3JOuYAuyhdsqCPU%2BFHslHQD9cKwI7jmKtlSsrz%2BPiGGGhOLBjSgAg/m3jO7nzMlSrSbiXLJV510A3dOi0X/TRTuNko9KMGaayyKcVSUhbtbLfoZ0SX%2BciL2CbFR5/DPXl91l5jcsjg0eHH3UouecqfyNRsIH8p9BBgAANInlRmoOxQAAAAASUVORK5CYII=)](https://www.nuget.org/packages/Alba.Avalonia.FlexPanel)
+[![AppVeyor build master](https://img.shields.io/appveyor/ci/athari/alba-avalonia-flexpanel/master.svg?logo=appveyor)](https://ci.appveyor.com/project/Athari/alba-avalonia-flexpanel/branch/master)
+[![GitHub release version](https://img.shields.io/github/release/Athari/Alba.Avalonia.FlexPanel.svg?logo=github)](https://github.com/Athari/Alba.Avalonia.FlexPanel/releases)
+
 Panel implementing CSS-like flexbox for Avalonia 11.
+
+* [**GitHub repository**](https://github.com/Athari/Alba.Avalonia.FlexPanel)
+* [**NuGet package**](https://www.nuget.org/packages/Alba.Avalonia.FlexPanel)
+<!-- -->
+    PM> Install-Package Alba.Avalonia.FlexPanel
 
 ## Features
 
