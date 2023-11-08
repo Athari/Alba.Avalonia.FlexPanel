@@ -9,6 +9,6 @@
     <ArtifactsPath>$(SolutionRootPath)Artifacts/</ArtifactsPath>
     <BaseOutputPath>$(ArtifactsPath)Bin\</BaseOutputPath>
     <BaseIntermediateOutputPath>$(ArtifactsPath)Obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
-    <PackageOutputPath>$(ArtifactsPath)nuget\$(Configuration)\</PackageOutputPath>
+    <PackageOutputPath>$(ArtifactsPath)NuGet\$(Configuration)\</PackageOutputPath>
   </PropertyGroup>
 </Project>

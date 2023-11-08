@@ -4,9 +4,56 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <VersionPrefix>0.5.0</VersionPrefix>
+    <VersionSuffixBase>alpha</VersionSuffixBase>
+    <Authors>Athari</Authors>
+    <Description>Panel implementing CSS-like flexbox for Avalonia.</Description>
+    <Copyright>Copyright © 2023–$([System.DateTime]::Now.ToString(yyyy)) Alexander "Athari" Prokhorov</Copyright>
+    <PackageProjectUrl>https://github.com/Athari/Alba.Avalonia.FlexPanel</PackageProjectUrl>
+    <PackageReleaseNotes>$(PackageProjectUrl)/blob/master/ReadMe.md</PackageReleaseNotes>
+    <!--<PackageIconUrl>$(PackageProjectUrl)/raw/master/Docs/Images/Icon.png</PackageIconUrl>-->
+    <RepositoryUrl>$(PackageProjectUrl).git</RepositoryUrl>
+    <PackageReadmeFile>ReadMe.md</PackageReadmeFile>
+    <PackageTags>avalonia;avaloniaui;flexbox;flex;flexboxpanel;flexpanel;xaml</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(APPVEYOR)' != ''">
+    <IsTagRelease>false</IsTagRelease>
+    <IsTagRelease Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(AppVeyor_Repo_Tag_Name)', '^v[0-9]+\.[0-9]+\.[0-9]+'))">true</IsTagRelease>
+    <AppVeyorBuildNumber>$(AppVeyor_Build_Number)</AppVeyorBuildNumber>
+    <AppVeyorRepo>$([System.Text.RegularExpressions.Regex]::Replace('$(AppVeyor_Repo_Name.ToLower())', '(?i)[^a-z0-9/]', '').Replace('/', '.'))</AppVeyorRepo>
+    <AppVeyorTag>$([System.Text.RegularExpressions.Regex]::Replace('$(AppVeyor_Repo_Tag_Name.ToLower())', '(?i)[^a-z0-9]', ''))</AppVeyorTag>
+    <AppVeyorTagVersion Condition="'$(IsTagRelease)' == 'true'">$(AppVeyor_Repo_Tag_Name.Substring(1))</AppVeyorTagVersion>
+    <AppVeyorBranch>$([System.Text.RegularExpressions.Regex]::Replace('$(AppVeyor_Repo_Branch.ToLower())', '(?i)[^a-z0-9]', ''))</AppVeyorBranch>
+    <AppVeyorPullNumber>$(AppVeyor_Pull_Request_Number)</AppVeyorPullNumber>
+    <AppVeyorPullRepo>$([System.Text.RegularExpressions.Regex]::Replace('$(AppVeyor_Pull_Request_Head_Repo_Name.ToLower())', '(?i)[^a-z0-9/]', '').Replace('/', '.'))</AppVeyorPullRepo>
+    <AppVeyorPullBranch>$([System.Text.RegularExpressions.Regex]::Replace('$(AppVeyor_Pull_Request_Head_Repo_Branch.ToLower())', '(?i)[^a-z0-9]', ''))</AppVeyorPullBranch>
+
+    <AppVeyorVersionSuffix Condition="'$(IsTagRelease)' == 'false' and '$(AppVeyorBranch)' == 'master'">$(VersionSuffixBase).$(AppVeyorBuildNumber)</AppVeyorVersionSuffix>
+    <AppVeyorVersionSuffix Condition="'$(IsTagRelease)' == 'false' and '$(AppVeyorBranch)' != 'master'">$(VersionSuffixBase).$(AppVeyorBranch).$(AppVeyorBuildNumber)</AppVeyorVersionSuffix>
+    <AppVeyorVersionSuffix Condition="'$(AppVeyorPullNumber)' != ''">$(AppVeyorVersionSuffix).pull.$(AppVeyorPullNumber).$(AppVeyorPullRepo).$(AppVeyorPullBranch)</AppVeyorVersionSuffix>
+
+    <VersionPrefix Condition="'$(IsTagRelease)' == 'true'">$(AppVeyorTagVersion)</VersionPrefix>
+    <VersionSuffix>$(AppVeyorVersionSuffix)</VersionSuffix>
+    <FileVersion>$(VersionPrefix).$(AppVeyorBuildNumber)</FileVersion>
+    <AssemblyVersion>$(VersionPrefix).$(AppVeyorBuildNumber)</AssemblyVersion>
+
+    <RepositoryBranch>$(AppVeyor_Repo_Branch)</RepositoryBranch>
+    <RepositoryCommit>$(AppVeyor_Repo_Commit)</RepositoryCommit>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.0.0" />
     <PackageReference Include="jp2masa.Avalonia.PropertyGenerator.CSharp" Version="0.10.0-beta7" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\*.md" LinkBase="Docs" Pack="True" PackagePath="\" />
   </ItemGroup>
 
 </Project>

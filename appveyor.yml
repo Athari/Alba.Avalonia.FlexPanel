@@ -1,0 +1,46 @@
+version: '{branch}.build.{build}'
+image: Visual Studio 2022
+
+configuration:
+- Debug
+- Release
+platform: Any CPU
+
+nuget:
+  account_feed: false
+  project_feed: true
+
+init:
+- ps: >-
+    if ($env:APPVEYOR_REPO_TAG -eq "true") {
+        Update-AppveyorBuild -Version $env:APPVEYOR_REPO_TAG_NAME
+    }
+    else {
+        Update-AppveyorBuild -Version "$($env:APPVEYOR_REPO_BRANCH).build.$($env:APPVEYOR_BUILD_NUMBER)"
+    }
+
+build_script:
+  - cmd: dotnet msbuild /t:Restore;Build Alba.Avalonia.FlexPanel.sln
+
+test: off
+
+artifacts:
+- path: Artifacts\NuGet\Debug\*.nupkg
+  name: NuGetDebug
+- path: Artifacts\NuGet\Release\*.nupkg
+  name: NuGetRelease
+
+deploy:
+- provider: NuGet
+  server: https://www.myget.org/F/athari/api/v2/package
+  api_key:
+    secure: JFNRqMPyhqt4e1ga2ad6jSF1K+Nhmsepo0nwRMga05kRGOFtY297hV0iGNQSVa6l
+  artifact: NuGetDebug
+  on:
+    configuration: Debug
+- provider: NuGet
+  api_key:
+    secure: sWKhn+qqZMTuhmTDufQ3VEW8DqrECqbZ7E+pqjnV4FyeTYWkWSaZU5Tq81kToF/t
+  artifact: NuGetRelease
+  on:
+    configuration: Release
