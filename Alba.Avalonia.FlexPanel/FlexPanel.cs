@@ -73,6 +73,8 @@ public sealed partial class FlexPanel : Panel
                 child.SetCurrentValue(WidthProperty, flexBasis);
             child.Measure(childConstraint);
             var sz = new UVSize(flexDirection, child.DesiredSize);
+            if (itemIndex > 0)
+                sz.U += gap.U;
 
             if (flexWrap == FlexWrap.NoWrap) //continue to accumulate a line
             {
@@ -81,9 +83,9 @@ public sealed partial class FlexPanel : Panel
                 curLineSize.V = Math.Max(sz.V, curLineSize.V);
             }
             else {
-                if (MathHelper.GreaterThan(curLineSize.U + sz.U + itemIndex * gap.U, _uvConstraint.U)) //need to switch to another line
+                if (MathHelper.GreaterThan(curLineSize.U + sz.U, _uvConstraint.U)) //need to switch to another line
                 {
-                    panelSize.U = Math.Max(curLineSize.U + itemIndex * gap.U, panelSize.U);
+                    panelSize.U = Math.Max(curLineSize.U, panelSize.U);
                     panelSize.V += curLineSize.V;
                     itemIndex = 0;
                     curLineSize = sz;
@@ -107,11 +109,15 @@ public sealed partial class FlexPanel : Panel
         }
 
         //the last line size, if any should be added
-        panelSize.U = Math.Max(curLineSize.U + itemIndex * gap.U, panelSize.U);
+        panelSize.U = Math.Max(curLineSize.U, panelSize.U);
         panelSize.V += curLineSize.V + (_lineCount - 1) * gap.V;
 
         //go from UV space to W/H space
-        return new Size(panelSize.Width, panelSize.Height);
+        return HorizontalAlignment == HorizontalAlignment.Stretch && Direction == FlexDirection.Row
+            ? new Size(Math.Max(panelSize.Width, constraint.Width), panelSize.Height)
+            : VerticalAlignment == VerticalAlignment.Stretch && Direction == FlexDirection.Column
+                ? new Size(panelSize.Width, Math.Max(panelSize.Height, constraint.Height))
+                : new Size(panelSize.Width, panelSize.Height);
     }
 
     protected override Size ArrangeOverride(Size arrangeSize)
@@ -140,6 +146,8 @@ public sealed partial class FlexPanel : Panel
         for (var i = 0; i < Children.Count; i++) {
             var child = Children[_orderList[i].Index];
             var sz = new UVSize(flexDirection, child.DesiredSize);
+            if (itemIndex > 0)
+                sz.U += gap.U;
 
             if (flexWrap == FlexWrap.NoWrap) {
                 itemIndex++;
@@ -147,7 +155,7 @@ public sealed partial class FlexPanel : Panel
                 curLineSizeArr[lineIndex].V = Math.Max(sz.V, curLineSizeArr[lineIndex].V);
             }
             else {
-                if (MathHelper.GreaterThan(curLineSizeArr[lineIndex].U + sz.U + itemIndex * gap.U, uvFinalSize.U)) //need to switch to another line
+                if (MathHelper.GreaterThan(curLineSizeArr[lineIndex].U + sz.U, uvFinalSize.U)) //need to switch to another line
                 {
                     lastInLineArr[lineIndex] = i;
                     itemIndex = 0;
@@ -317,12 +325,14 @@ public sealed partial class FlexPanel : Panel
         var flexWrap = Wrap;
         var justifyContent = JustifyContent;
         var alignItems = AlignItems;
+        var gap = new UVSize(flexDirection, new(ColumnGap, RowGap));
 
         var isHorizontal = flexDirection is FlexDirection.Row or FlexDirection.RowReverse;
         var isReverse = flexDirection is FlexDirection.RowReverse or FlexDirection.ColumnReverse;
         var itemCount = lineInfo.ItemEndIndex - lineInfo.ItemStartIndex;
-        var lineFreeU = lineInfo.LineU - lineInfo.ItemsU;
-        var constraintFreeU = _uvConstraint.U - lineInfo.ItemsU;
+        var totalGapU = (itemCount - 1) * gap.U;
+        var lineFreeU = lineInfo.LineU - lineInfo.ItemsU - totalGapU;
+        var constraintFreeU = _uvConstraint.U - lineInfo.ItemsU - totalGapU;
 
         // calculate initial u
         var u = 0.0;
@@ -434,12 +444,13 @@ public sealed partial class FlexPanel : Panel
 
             childSize.U += flexGrowUArr[j] + flexShrinkUArr[j];
 
+            var gapU = j > 0 ? gap.U : 0;
             if (isReverse) {
                 u -= childSize.U;
-                u -= offsetUArr[j];
+                u -= offsetUArr[j] - gapU;
             }
             else {
-                u += offsetUArr[j];
+                u += offsetUArr[j] + gapU;
             }
 
             var v = lineInfo.OffsetV;

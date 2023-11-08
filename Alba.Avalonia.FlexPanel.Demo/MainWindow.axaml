@@ -24,9 +24,7 @@
                         <Setter Property="Background" Value="MediumSlateBlue" />
                     </Style>
                 </ListBoxItem.Styles>
-                <TextBlock HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Text="{Binding Value}" />
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Value}" />
             </ListBoxItem>
         </DataTemplate>
     </Window.Resources>
@@ -45,16 +43,11 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
     </Window.Styles>
-
     <DockPanel Margin="16">
-
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                Padding="0,0,16,0"
-                MinWidth="200">
-
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" Padding="0,0,16,0" MinWidth="200">
             <StackPanel Spacing="16">
                 <TextBlock FontSize="16" Text="Properties" />
-                <flex:FlexPanel>
+                <flex:FlexPanel HorizontalAlignment="Left">
                     <RadioButton IsChecked="{Binding IsItemsControl}" Content="ItemsControl" />
                     <RadioButton IsChecked="{Binding IsItemsRepeater}" Content="ItemsRepeater" />
                 </flex:FlexPanel>
@@ -147,11 +140,9 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-
         <Border IsVisible="{Binding IsItemsRepeater}"
                 BorderBrush="DimGray"
                 BorderThickness="1">
-
             <ItemsRepeater ItemsSource="{Binding Numbers}"
                     ItemTemplate="{StaticResource ItemTemplate}">
                 <ItemsRepeater.Styles>
@@ -173,9 +164,6 @@
                             RowSpacing="{Binding RowSpacing}" />
                 </ItemsRepeater.Layout>-->
             </ItemsRepeater>
-
         </Border>
-
     </DockPanel>
-
 </Window>

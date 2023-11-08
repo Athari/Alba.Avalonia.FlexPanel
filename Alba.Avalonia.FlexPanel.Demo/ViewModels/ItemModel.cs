@@ -17,10 +17,10 @@ public sealed partial class ItemModel : ObservableObject
     private int _order;
 
     [ObservableProperty]
-    private double _flexGrow;
+    private double _flexGrow = 0.0d;
 
     [ObservableProperty]
-    private double _flexShink;
+    private double _flexShink = 1.0d;
 
     public int Value { get; }
 

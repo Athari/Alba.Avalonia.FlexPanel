@@ -33,7 +33,7 @@ public sealed partial class MainModel : ObservableObject
     private FlexWrap _wrap = FlexWrap.Wrap;
 
     [ObservableProperty]
-    private int _columnGap = 8;
+    private int _columnGap = 80;
 
     [ObservableProperty]
     private int _rowGap = 32;
