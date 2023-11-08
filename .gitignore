@@ -1,0 +1,5 @@
+.vs/
+Artifacts/
+Temp/
+*.user
+*.DotSettings.user

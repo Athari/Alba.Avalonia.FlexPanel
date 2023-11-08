@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34009.444
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alba.Avalonia.FlexPanel", "Alba.Avalonia.FlexPanel\Alba.Avalonia.FlexPanel.csproj", "{2F7F76FB-253F-4462-87EB-A6A868D26156}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alba.Avalonia.FlexPanel.Demo", "Alba.Avalonia.FlexPanel.Demo\Alba.Avalonia.FlexPanel.Demo.csproj", "{ADEA72D0-BD89-413D-8C48-0E0DCFB753C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Root", "Root", "{FF38A8F9-5203-43CD-847A-8FDDB772E0F8}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		License.md = License.md
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F7F76FB-253F-4462-87EB-A6A868D26156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F7F76FB-253F-4462-87EB-A6A868D26156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F7F76FB-253F-4462-87EB-A6A868D26156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F7F76FB-253F-4462-87EB-A6A868D26156}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADEA72D0-BD89-413D-8C48-0E0DCFB753C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADEA72D0-BD89-413D-8C48-0E0DCFB753C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADEA72D0-BD89-413D-8C48-0E0DCFB753C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADEA72D0-BD89-413D-8C48-0E0DCFB753C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {32765D7D-9640-4547-BD51-874AF60DD2EE}
+	EndGlobalSection
+EndGlobal
