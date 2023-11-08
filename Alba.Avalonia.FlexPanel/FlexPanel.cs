@@ -113,11 +113,7 @@ public sealed partial class FlexPanel : Panel
         panelSize.V += curLineSize.V + (_lineCount - 1) * gap.V;
 
         //go from UV space to W/H space
-        return HorizontalAlignment == HorizontalAlignment.Stretch && Direction == FlexDirection.Row
-            ? new Size(Math.Max(panelSize.Width, constraint.Width), panelSize.Height)
-            : VerticalAlignment == VerticalAlignment.Stretch && Direction == FlexDirection.Column
-                ? new Size(panelSize.Width, Math.Max(panelSize.Height, constraint.Height))
-                : new Size(panelSize.Width, panelSize.Height);
+        return new Size(panelSize.Width, panelSize.Height);
     }
 
     protected override Size ArrangeOverride(Size arrangeSize)

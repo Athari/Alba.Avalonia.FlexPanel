@@ -43,8 +43,8 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
     </Window.Styles>
-    <DockPanel Margin="16">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" Padding="0,0,16,0" MinWidth="200">
+    <DockPanel Margin="16" LastChildFill="True">
+        <ScrollViewer DockPanel.Dock="Left" HorizontalScrollBarVisibility="Disabled" Padding="0,0,16,0" MinWidth="200">
             <StackPanel Spacing="16">
                 <TextBlock FontSize="16" Text="Properties" />
                 <flex:FlexPanel HorizontalAlignment="Left">
@@ -112,49 +112,50 @@
                 </Grid>
             </StackPanel>
         </ScrollViewer>
-        <ItemsControl HorizontalAlignment="Stretch"
-                IsVisible="{Binding IsItemsControl}"
-                BorderBrush="DimGray"
-                BorderThickness="1"
-                ItemsSource="{Binding Numbers}"
-                ItemTemplate="{StaticResource ItemTemplate}">
-            <ItemsControl.Styles>
-                <Style Selector="ContentPresenter" x:DataType="vm:ItemModel">
-                    <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
-                    <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
-                    <Setter Property="flex:FlexPanel.Shrink" Value="{Binding FlexShink}" />
-                    <Setter Property="flex:FlexPanel.Grow" Value="{Binding FlexGrow}" />
-                    <Setter Property="IsVisible" Value="{Binding IsVisible}" />
-                </Style>
-            </ItemsControl.Styles>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <flex:FlexPanel HorizontalAlignment="Stretch"
-                            Direction="{Binding Direction}"
-                            Wrap="{Binding Wrap}"
-                            JustifyContent="{Binding JustifyContent}"
-                            AlignItems="{Binding AlignItems}"
-                            AlignContent="{Binding AlignContent}"
-                            ColumnGap="{Binding ColumnGap}"
-                            RowGap="{Binding RowGap}" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <Border IsVisible="{Binding IsItemsRepeater}"
-                BorderBrush="DimGray"
-                BorderThickness="1">
-            <ItemsRepeater ItemsSource="{Binding Numbers}"
+        <Grid>
+            <ItemsControl HorizontalAlignment="Stretch"
+                    IsVisible="{Binding IsItemsControl}"
+                    BorderBrush="DimGray"
+                    BorderThickness="1"
+                    ItemsSource="{Binding Numbers}"
                     ItemTemplate="{StaticResource ItemTemplate}">
-                <ItemsRepeater.Styles>
-                    <Style Selector="ListBoxItem" x:DataType="vm:ItemModel">
+                <ItemsControl.Styles>
+                    <Style Selector="ContentPresenter" x:DataType="vm:ItemModel">
                         <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
                         <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
                         <Setter Property="flex:FlexPanel.Shrink" Value="{Binding FlexShink}" />
                         <Setter Property="flex:FlexPanel.Grow" Value="{Binding FlexGrow}" />
                         <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                     </Style>
-                </ItemsRepeater.Styles>
-                <!--<ItemsRepeater.Layout>
+                </ItemsControl.Styles>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <flex:FlexPanel HorizontalAlignment="Stretch"
+                                Direction="{Binding Direction}"
+                                Wrap="{Binding Wrap}"
+                                JustifyContent="{Binding JustifyContent}"
+                                AlignItems="{Binding AlignItems}"
+                                AlignContent="{Binding AlignContent}"
+                                ColumnGap="{Binding ColumnGap}"
+                                RowGap="{Binding RowGap}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <Border IsVisible="{Binding IsItemsRepeater}"
+                    BorderBrush="DimGray"
+                    BorderThickness="1">
+                <ItemsRepeater ItemsSource="{Binding Numbers}"
+                        ItemTemplate="{StaticResource ItemTemplate}">
+                    <ItemsRepeater.Styles>
+                        <Style Selector="ListBoxItem" x:DataType="vm:ItemModel">
+                            <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
+                            <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
+                            <Setter Property="flex:FlexPanel.Shrink" Value="{Binding FlexShink}" />
+                            <Setter Property="flex:FlexPanel.Grow" Value="{Binding FlexGrow}" />
+                            <Setter Property="IsVisible" Value="{Binding IsVisible}" />
+                        </Style>
+                    </ItemsRepeater.Styles>
+                    <!--<ItemsRepeater.Layout>
                     <flex:FlexLayout Direction="{Binding Direction}"
                             JustifyContent="{Binding JustifyContent}"
                             AlignItems="{Binding AlignItems}"
@@ -163,7 +164,8 @@
                             ColumnSpacing="{Binding ColumnSpacing}"
                             RowSpacing="{Binding RowSpacing}" />
                 </ItemsRepeater.Layout>-->
-            </ItemsRepeater>
-        </Border>
+                </ItemsRepeater>
+            </Border>
+        </Grid>
     </DockPanel>
 </Window>
