@@ -34,10 +34,14 @@ public sealed partial class FlexPanel : Panel
         AvaloniaProperty.Register<FlexPanel, FlexItemsAlignment>(nameof(AlignItems), FlexItemsAlignment.Stretch);
     public static readonly StyledProperty<FlexContentAlignment> AlignContentProperty =
         AvaloniaProperty.Register<FlexPanel, FlexContentAlignment>(nameof(AlignContent), FlexContentAlignment.Stretch);
+    public static readonly StyledProperty<double> RowGapProperty =
+        AvaloniaProperty.Register<FlexPanel, double>(nameof(RowGap), 0.0d);
+    public static readonly StyledProperty<double> ColumnGapProperty =
+        AvaloniaProperty.Register<FlexPanel, double>(nameof(ColumnGap), 0.0d);
 
     static FlexPanel()
     {
-        AffectsMeasure<FlexPanel>(DirectionProperty, WrapProperty, JustifyContentProperty);
+        AffectsMeasure<FlexPanel>(DirectionProperty, WrapProperty, JustifyContentProperty, ColumnGapProperty, RowGapProperty);
         AffectsArrange<FlexPanel>(AlignItemsProperty, AlignContentProperty);
         AffectsParentMeasure<FlexPanel>(OrderProperty, FlexGrowProperty, FlexShrinkProperty, FlexBasisProperty);
         AffectsParentArrange<FlexPanel>(AlignSelfProperty);
@@ -50,6 +54,7 @@ public sealed partial class FlexPanel : Panel
 
         var curLineSize = new UVSize(flexDirection);
         var panelSize = new UVSize(flexDirection);
+        var gap = new UVSize(flexDirection, new(ColumnGap, RowGap));
         _uvConstraint = new UVSize(flexDirection, constraint);
         var childConstraint = new Size(constraint.Width, constraint.Height);
         _lineCount = 1;
@@ -58,6 +63,8 @@ public sealed partial class FlexPanel : Panel
         for (var i = 0; i < Children.Count; i++)
             _orderList.Add(new(i, GetOrder(Children[i])));
         _orderList.Sort();
+
+        var itemIndex = 0;
 
         for (var i = 0; i < Children.Count; i++) {
             var child = Children[_orderList[i].Index];
@@ -69,14 +76,16 @@ public sealed partial class FlexPanel : Panel
 
             if (flexWrap == FlexWrap.NoWrap) //continue to accumulate a line
             {
+                itemIndex++;
                 curLineSize.U += sz.U;
                 curLineSize.V = Math.Max(sz.V, curLineSize.V);
             }
             else {
-                if (MathHelper.GreaterThan(curLineSize.U + sz.U, _uvConstraint.U)) //need to switch to another line
+                if (MathHelper.GreaterThan(curLineSize.U + sz.U + itemIndex * gap.U, _uvConstraint.U)) //need to switch to another line
                 {
-                    panelSize.U = Math.Max(curLineSize.U, panelSize.U);
+                    panelSize.U = Math.Max(curLineSize.U + itemIndex * gap.U, panelSize.U);
                     panelSize.V += curLineSize.V;
+                    itemIndex = 0;
                     curLineSize = sz;
                     _lineCount++;
 
@@ -90,6 +99,7 @@ public sealed partial class FlexPanel : Panel
                 }
                 else //continue to accumulate a line
                 {
+                    itemIndex++;
                     curLineSize.U += sz.U;
                     curLineSize.V = Math.Max(sz.V, curLineSize.V);
                 }
@@ -97,8 +107,8 @@ public sealed partial class FlexPanel : Panel
         }
 
         //the last line size, if any should be added
-        panelSize.U = Math.Max(curLineSize.U, panelSize.U);
-        panelSize.V += curLineSize.V;
+        panelSize.U = Math.Max(curLineSize.U + itemIndex * gap.U, panelSize.U);
+        panelSize.V += curLineSize.V + (_lineCount - 1) * gap.V;
 
         //go from UV space to W/H space
         return new Size(panelSize.Width, panelSize.Height);
@@ -106,16 +116,16 @@ public sealed partial class FlexPanel : Panel
 
     protected override Size ArrangeOverride(Size arrangeSize)
     {
+        if (MathHelper.IsZero(arrangeSize.Width) || MathHelper.IsZero(arrangeSize.Height))
+            return arrangeSize;
+
         var flexDirection = Direction;
         var flexWrap = Wrap;
         var alignContent = AlignContent;
-
         var uvFinalSize = new UVSize(flexDirection, arrangeSize);
-        if (MathHelper.IsZero(uvFinalSize.U) || MathHelper.IsZero(uvFinalSize.V)) return arrangeSize;
 
         // init status
-        var lineIndex = 0;
-
+        var gap = new UVSize(flexDirection, new(ColumnGap, RowGap));
         var curLineSizeArr = new UVSize[_lineCount];
         curLineSizeArr[0] = new UVSize(flexDirection);
 
@@ -123,19 +133,24 @@ public sealed partial class FlexPanel : Panel
         for (var i = 0; i < _lineCount; i++)
             lastInLineArr[i] = int.MaxValue;
 
+        var lineIndex = 0;
+        var itemIndex = 0;
+
         // calculate line max U space
         for (var i = 0; i < Children.Count; i++) {
             var child = Children[_orderList[i].Index];
             var sz = new UVSize(flexDirection, child.DesiredSize);
 
             if (flexWrap == FlexWrap.NoWrap) {
+                itemIndex++;
                 curLineSizeArr[lineIndex].U += sz.U;
                 curLineSizeArr[lineIndex].V = Math.Max(sz.V, curLineSizeArr[lineIndex].V);
             }
             else {
-                if (MathHelper.GreaterThan(curLineSizeArr[lineIndex].U + sz.U, uvFinalSize.U)) //need to switch to another line
+                if (MathHelper.GreaterThan(curLineSizeArr[lineIndex].U + sz.U + itemIndex * gap.U, uvFinalSize.U)) //need to switch to another line
                 {
                     lastInLineArr[lineIndex] = i;
+                    itemIndex = 0;
                     lineIndex++;
                     curLineSizeArr[lineIndex] = sz;
 
@@ -149,6 +164,7 @@ public sealed partial class FlexPanel : Panel
                 }
                 else //continue to accumulate a line
                 {
+                    itemIndex++;
                     curLineSizeArr[lineIndex].U += sz.U;
                     curLineSizeArr[lineIndex].V = Math.Max(sz.V, curLineSizeArr[lineIndex].V);
                 }
@@ -163,20 +179,21 @@ public sealed partial class FlexPanel : Panel
         var accumulatedFlag = flexWrap == FlexWrap.WrapReverse ? 1 : 0;
         var itemsU = 0.0;
         var accumulatedV = 0.0;
-        var freeV = uvFinalSize.V;
-        foreach (var flexSize in curLineSizeArr)
-            freeV -= flexSize.V;
+        var freeV = Math.Max(uvFinalSize.V - curLineSizeArr.Sum(l => l.V) - (_lineCount - 1) * gap.V, 0);
+        //var freeV = uvFinalSize.V - curLineSizeArr.Sum(l => l.V) - (_lineCount - 1) * gap.V;
         var freeItemV = freeV;
+        var lineFreeVArr = new double[_lineCount];
+        for (var i = 0; i < _lineCount - 1; i++)
+            lineFreeVArr[i] = gap.V;
 
         // calculate status
-        var lineFreeVArr = new double[_lineCount];
         switch (alignContent) {
             case FlexContentAlignment.Stretch:
                 if (_lineCount > 1) {
                     freeItemV = freeV / _lineCount;
                     for (var i = 0; i < _lineCount; i++)
-                        lineFreeVArr[i] = freeItemV;
-                    accumulatedV = flexWrap == FlexWrap.WrapReverse ? uvFinalSize.V - curLineSizeArr[0].V - lineFreeVArr[0] : 0;
+                        curLineSizeArr[i].V += freeItemV;
+                    accumulatedV = flexWrap == FlexWrap.WrapReverse ? uvFinalSize.V - curLineSizeArr[0].V : 0;
                 }
                 break;
             case FlexContentAlignment.FlexStart:
@@ -201,7 +218,7 @@ public sealed partial class FlexPanel : Panel
                 if (_lineCount > 1) {
                     freeItemV = freeV / (_lineCount - 1);
                     for (var i = 0; i < _lineCount - 1; i++)
-                        lineFreeVArr[i] = freeItemV;
+                        lineFreeVArr[i] += freeItemV;
                     accumulatedV = flexWrap == FlexWrap.WrapReverse ? uvFinalSize.V - curLineSizeArr[0].V : 0;
                 }
                 break;
@@ -209,7 +226,7 @@ public sealed partial class FlexPanel : Panel
                 if (_lineCount > 1) {
                     freeItemV = freeV / _lineCount * 0.5;
                     for (var i = 0; i < _lineCount - 1; i++)
-                        lineFreeVArr[i] = freeItemV * 2;
+                        lineFreeVArr[i] += freeItemV * 2;
                     accumulatedV = flexWrap == FlexWrap.WrapReverse ? uvFinalSize.V - curLineSizeArr[0].V - freeItemV : freeItemV;
                 }
                 break;
@@ -217,7 +234,7 @@ public sealed partial class FlexPanel : Panel
                 if (_lineCount > 1) {
                     freeItemV = freeV / (_lineCount + 1);
                     for (var i = 0; i < _lineCount - 1; i++)
-                        lineFreeVArr[i] = freeItemV;
+                        lineFreeVArr[i] += freeItemV;
                     accumulatedV = flexWrap == FlexWrap.WrapReverse ? uvFinalSize.V - curLineSizeArr[0].V - freeItemV : freeItemV;
                 }
                 break;
@@ -335,7 +352,7 @@ public sealed partial class FlexPanel : Panel
             var flexGrowSum = 0.0;
 
             for (var i = 0; i < itemCount; i++) {
-                var flexGrow = GetFlexGrow(Children[_orderList[i].Index]);
+                var flexGrow = GetFlexGrow(Children[_orderList[lineInfo.ItemStartIndex + i].Index]);
                 ignoreFlexGrow &= MathHelper.IsVerySmall(flexGrow);
                 flexGrowUArr[i] = flexGrow;
                 flexGrowSum += flexGrow;
@@ -363,7 +380,7 @@ public sealed partial class FlexPanel : Panel
             var flexShrinkSum = 0.0;
 
             for (var i = 0; i < itemCount; i++) {
-                var flexShrink = GetFlexShrink(Children[_orderList[i].Index]);
+                var flexShrink = GetFlexShrink(Children[_orderList[lineInfo.ItemStartIndex + i].Index]);
                 ignoreFlexShrink &= MathHelper.IsVerySmall(flexShrink - 1);
                 flexShrinkUArr[i] = flexShrink;
                 flexShrinkSum += flexShrink;
@@ -430,7 +447,7 @@ public sealed partial class FlexPanel : Panel
             switch (alignment) {
                 case FlexItemsAlignment.Stretch:
                     if (_lineCount == 1 && flexWrap == FlexWrap.NoWrap)
-                        childSize.V = lineInfo.LineV + lineInfo.LineFreeV;
+                        childSize.V = lineInfo.LineV + lineInfo.LineFreeV; // TODO ?
                     else
                         childSize.V = lineInfo.LineV;
                     break;
@@ -529,6 +546,9 @@ public sealed partial class FlexPanel : Panel
                     U = value;
             }
         }
+
+        public override string ToString() => 
+            $"U: {U}, V: {V}";
     }
 }
 

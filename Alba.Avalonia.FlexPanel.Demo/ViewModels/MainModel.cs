@@ -33,10 +33,10 @@ public sealed partial class MainModel : ObservableObject
     private FlexWrap _wrap = FlexWrap.Wrap;
 
     [ObservableProperty]
-    private int _columnSpacing = 8;
+    private int _columnGap = 8;
 
     [ObservableProperty]
-    private int _rowSpacing = 32;
+    private int _rowGap = 32;
 
     private int _currentNumber = 41;
 
@@ -80,6 +80,9 @@ public sealed partial class MainModel : ObservableObject
             return;
         _numbers.Remove(SelectedItem);
         SelectedItem.IsSelected = false;
-        SelectedItem = null;
+        if (Numbers.Any()) {
+            SelectedItem = Numbers.Last();
+            SelectedItem.IsSelected = true;
+        }
     }
 }

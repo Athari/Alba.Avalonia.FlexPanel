@@ -16,6 +16,12 @@ public sealed partial class ItemModel : ObservableObject
     [ObservableProperty]
     private int _order;
 
+    [ObservableProperty]
+    private double _flexGrow;
+
+    [ObservableProperty]
+    private double _flexShink;
+
     public int Value { get; }
 
     public ItemModel(int value) =>

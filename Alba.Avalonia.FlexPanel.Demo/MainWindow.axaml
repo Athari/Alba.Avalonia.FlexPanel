@@ -53,131 +53,113 @@
                 MinWidth="200">
 
             <StackPanel Spacing="16">
-
-                <TextBlock FontSize="16"
-                        Text="Properties" />
-
+                <TextBlock FontSize="16" Text="Properties" />
                 <flex:FlexPanel>
-                    <RadioButton IsChecked="{Binding IsItemsControl}"
-                            Content="ItemsControl" />
-                    <RadioButton IsChecked="{Binding IsItemsRepeater}"
-                            Content="ItemsRepeater" />
+                    <RadioButton IsChecked="{Binding IsItemsControl}" Content="ItemsControl" />
+                    <RadioButton IsChecked="{Binding IsItemsRepeater}" Content="ItemsRepeater" />
                 </flex:FlexPanel>
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="Direction:" />
-                    <ComboBox ItemsSource="{Binding DirectionValues}"
-                            SelectedItem="{Binding Direction}" />
+                    <TextBlock Text="flex-direction:" />
+                    <ComboBox ItemsSource="{Binding DirectionValues}" SelectedItem="{Binding Direction}" />
                 </StackPanel>
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="JustifyContent:" />
-                    <ComboBox ItemsSource="{Binding JustifyContentValues}"
-                            SelectedItem="{Binding JustifyContent}" />
+                    <TextBlock Text="justify-content:" />
+                    <ComboBox ItemsSource="{Binding JustifyContentValues}" SelectedItem="{Binding JustifyContent}" />
                 </StackPanel>
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="AlignItems:" />
-                    <ComboBox ItemsSource="{Binding AlignItemsValues}"
-                            SelectedItem="{Binding AlignItems}" />
+                    <TextBlock Text="align-items:" />
+                    <ComboBox ItemsSource="{Binding AlignItemsValues}" SelectedItem="{Binding AlignItems}" />
                 </StackPanel>
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="AlignContent:" />
-                    <ComboBox ItemsSource="{Binding AlignContentValues}"
-                            SelectedItem="{Binding AlignContent}" />
+                    <TextBlock Text="align-content:" />
+                    <ComboBox ItemsSource="{Binding AlignContentValues}" SelectedItem="{Binding AlignContent}" />
                 </StackPanel>
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="Wrap:" />
-                    <ComboBox ItemsSource="{Binding WrapValues}"
-                            SelectedItem="{Binding Wrap}" />
+                    <TextBlock Text="flex-wrap:" />
+                    <ComboBox ItemsSource="{Binding WrapValues}" SelectedItem="{Binding Wrap}" />
                 </StackPanel>
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="ColumnSpacing:" />
-                    <NumericUpDown Minimum="0"
-                            Value="{Binding ColumnSpacing}" />
+                    <TextBlock Text="column-gap:" />
+                    <NumericUpDown Minimum="0" Value="{Binding ColumnGap}" />
                 </StackPanel>
-
+                <TextBlock Text="Selected item" FontWeight="Black" />
                 <StackPanel Spacing="8">
-                    <TextBlock Text="RowSpacing:" />
-                    <NumericUpDown Minimum="0"
-                            Value="{Binding RowSpacing}" />
+                    <TextBlock Text="row-gap:" />
+                    <NumericUpDown Minimum="0" Value="{Binding RowGap}" />
                 </StackPanel>
-
                 <CheckBox IsEnabled="{Binding !!SelectedItem}"
                         Content="SelectedItem IsVisible"
                         IsChecked="{Binding SelectedItem.IsVisible, FallbackValue=False}" />
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="SelectedItem AlignSelf:" />
+                    <TextBlock Text="align-self:" />
                     <ComboBox IsEnabled="{Binding !!SelectedItem}"
                             ItemsSource="{Binding AlignSelfValues}"
                             SelectedItem="{Binding SelectedItem.AlignSelf, FallbackValue=False}" />
                 </StackPanel>
-
                 <StackPanel Spacing="8">
-                    <TextBlock Text="SelectedItem Order:" />
-                    <NumericUpDown IsEnabled="{Binding !!SelectedItem}"
-                            Value="{Binding SelectedItem.Order, FallbackValue=0}" />
+                    <TextBlock Text="order:" />
+                    <NumericUpDown IsEnabled="{Binding !!SelectedItem}" Value="{Binding SelectedItem.Order, FallbackValue=0}" />
+                </StackPanel>
+                <StackPanel Spacing="8">
+                    <TextBlock Text="flex-shrink:" />
+                    <NumericUpDown IsEnabled="{Binding !!SelectedItem}" Value="{Binding SelectedItem.FlexShink, FallbackValue=1}" />
+                </StackPanel>
+                <StackPanel Spacing="8">
+                    <TextBlock Text="flex-grow:" />
+                    <NumericUpDown IsEnabled="{Binding !!SelectedItem}" Value="{Binding SelectedItem.FlexGrow, FallbackValue=0}" />
                 </StackPanel>
 
                 <Grid ColumnDefinitions="*,8,*">
-
-                    <Button Grid.Column="0"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
+                    <Button Grid.Column="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                             Command="{Binding AddItemCommand}"
                             Content="Add Item" />
-
-                    <Button Grid.Column="2"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Center"
+                    <Button Grid.Column="2" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
                             Command="{Binding RemoveItemCommand}"
                             Content="Remove Item" />
-
                 </Grid>
-
             </StackPanel>
-
         </ScrollViewer>
-
-        <ItemsControl IsVisible="{Binding IsItemsControl}"
-                BorderBrush="Black"
+        <ItemsControl HorizontalAlignment="Stretch"
+                IsVisible="{Binding IsItemsControl}"
+                BorderBrush="DimGray"
                 BorderThickness="1"
                 ItemsSource="{Binding Numbers}"
                 ItemTemplate="{StaticResource ItemTemplate}">
             <ItemsControl.Styles>
-                <Style Selector="ContentPresenter"
-                        x:DataType="vm:ItemModel">
+                <Style Selector="ContentPresenter" x:DataType="vm:ItemModel">
                     <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
                     <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
+                    <Setter Property="flex:FlexPanel.FlexShrink" Value="{Binding FlexShink}" />
+                    <Setter Property="flex:FlexPanel.FlexGrow" Value="{Binding FlexGrow}" />
                     <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                 </Style>
             </ItemsControl.Styles>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <flex:FlexPanel Direction="{Binding Direction}"
+                    <flex:FlexPanel HorizontalAlignment="Stretch"
+                            Direction="{Binding Direction}"
+                            Wrap="{Binding Wrap}"
                             JustifyContent="{Binding JustifyContent}"
                             AlignItems="{Binding AlignItems}"
                             AlignContent="{Binding AlignContent}"
-                            Wrap="{Binding Wrap}" />
+                            ColumnGap="{Binding ColumnGap}"
+                            RowGap="{Binding RowGap}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
 
         <Border IsVisible="{Binding IsItemsRepeater}"
-                BorderBrush="Black"
+                BorderBrush="DimGray"
                 BorderThickness="1">
 
             <ItemsRepeater ItemsSource="{Binding Numbers}"
                     ItemTemplate="{StaticResource ItemTemplate}">
                 <ItemsRepeater.Styles>
-                    <Style Selector="ListBoxItem"
-                            x:DataType="vm:ItemModel">
+                    <Style Selector="ListBoxItem" x:DataType="vm:ItemModel">
                         <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
                         <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
+                        <Setter Property="flex:FlexPanel.FlexShrink" Value="{Binding FlexShink}" />
+                        <Setter Property="flex:FlexPanel.FlexGrow" Value="{Binding FlexGrow}" />
                         <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                     </Style>
                 </ItemsRepeater.Styles>
