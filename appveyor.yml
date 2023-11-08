@@ -33,6 +33,7 @@ artifacts:
 deploy:
 - provider: NuGet
   server: https://www.myget.org/F/athari/api/v2/package
+  symbol_server: https://www.myget.org/F/athari/symbols/api/v2/package
   api_key:
     secure: exjvOVQvyAc6tYMZ9B0AOXheLn0HyMhltk1HC5J5rsXqaxjQP5F1R8RrixKlGrdI
   artifact: NuGetDebug
