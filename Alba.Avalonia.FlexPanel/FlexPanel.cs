@@ -16,11 +16,11 @@ public sealed partial class FlexPanel : Panel
 
     public static readonly AttachedProperty<int> OrderProperty =
         AvaloniaProperty.RegisterAttached<FlexPanel, Layoutable, int>("Order", 0);
-    public static readonly AttachedProperty<double> FlexGrowProperty =
+    public static readonly AttachedProperty<double> GrowProperty =
         AvaloniaProperty.RegisterAttached<FlexPanel, Layoutable, double>("FlexGrow", 0.0d, validate: IsInRangeOfPosDoubleIncludeZero);
-    public static readonly AttachedProperty<double> FlexShrinkProperty =
+    public static readonly AttachedProperty<double> ShrinkProperty =
         AvaloniaProperty.RegisterAttached<FlexPanel, Layoutable, double>("FlexShrink", 1.0d, validate: IsInRangeOfPosDoubleIncludeZero);
-    public static readonly AttachedProperty<double> FlexBasisProperty =
+    public static readonly AttachedProperty<double> BasisProperty =
         AvaloniaProperty.RegisterAttached<FlexPanel, Layoutable, double>("FlexBasis", double.NaN);
     public static readonly AttachedProperty<FlexItemAlignment> AlignSelfProperty =
         AvaloniaProperty.RegisterAttached<FlexPanel, Layoutable, FlexItemAlignment>("AlignSelf", FlexItemAlignment.Auto);
@@ -43,7 +43,7 @@ public sealed partial class FlexPanel : Panel
     {
         AffectsMeasure<FlexPanel>(DirectionProperty, WrapProperty, JustifyContentProperty, ColumnGapProperty, RowGapProperty);
         AffectsArrange<FlexPanel>(AlignItemsProperty, AlignContentProperty);
-        AffectsParentMeasure<FlexPanel>(OrderProperty, FlexGrowProperty, FlexShrinkProperty, FlexBasisProperty);
+        AffectsParentMeasure<FlexPanel>(OrderProperty, GrowProperty, ShrinkProperty, BasisProperty);
         AffectsParentArrange<FlexPanel>(AlignSelfProperty);
     }
 
@@ -68,7 +68,7 @@ public sealed partial class FlexPanel : Panel
 
         for (var i = 0; i < Children.Count; i++) {
             var child = Children[_orderList[i].Index];
-            var flexBasis = GetFlexBasis(child);
+            var flexBasis = GetBasis(child);
             if (!double.IsNaN(flexBasis))
                 child.SetCurrentValue(WidthProperty, flexBasis);
             child.Measure(childConstraint);
@@ -172,15 +172,17 @@ public sealed partial class FlexPanel : Panel
         }
 
         // init status
-        var scaleU = Math.Min(_uvConstraint.U / uvFinalSize.U, 1);
+        var scaleU = Math.Min(_uvConstraint.U / uvFinalSize.U, 1); // TODO ? The fuck is this scaling?
         var firstInLine = 0;
         var wrapReverseAdd = 0;
         var wrapReverseFlag = flexWrap == FlexWrap.WrapReverse ? -1 : 1;
         var accumulatedFlag = flexWrap == FlexWrap.WrapReverse ? 1 : 0;
         var itemsU = 0.0;
         var accumulatedV = 0.0;
+        // This leads to essentially forced align-content=flex-start when overflowing.
+        // Original CSS layout system makes top items disappear in some modes, which is even worse.
+        // TODO Fix wrap-reverse mode in overflow state.
         var freeV = Math.Max(uvFinalSize.V - curLineSizeArr.Sum(l => l.V) - (_lineCount - 1) * gap.V, 0);
-        //var freeV = uvFinalSize.V - curLineSizeArr.Sum(l => l.V) - (_lineCount - 1) * gap.V;
         var freeItemV = freeV;
         var lineFreeVArr = new double[_lineCount];
         for (var i = 0; i < _lineCount - 1; i++)
@@ -352,7 +354,7 @@ public sealed partial class FlexPanel : Panel
             var flexGrowSum = 0.0;
 
             for (var i = 0; i < itemCount; i++) {
-                var flexGrow = GetFlexGrow(Children[_orderList[lineInfo.ItemStartIndex + i].Index]);
+                var flexGrow = GetGrow(Children[_orderList[lineInfo.ItemStartIndex + i].Index]);
                 ignoreFlexGrow &= MathHelper.IsVerySmall(flexGrow);
                 flexGrowUArr[i] = flexGrow;
                 flexGrowSum += flexGrow;
@@ -380,7 +382,7 @@ public sealed partial class FlexPanel : Panel
             var flexShrinkSum = 0.0;
 
             for (var i = 0; i < itemCount; i++) {
-                var flexShrink = GetFlexShrink(Children[_orderList[lineInfo.ItemStartIndex + i].Index]);
+                var flexShrink = GetShrink(Children[_orderList[lineInfo.ItemStartIndex + i].Index]);
                 ignoreFlexShrink &= MathHelper.IsVerySmall(flexShrink - 1);
                 flexShrinkUArr[i] = flexShrink;
                 flexShrinkSum += flexShrink;

@@ -129,8 +129,8 @@
                 <Style Selector="ContentPresenter" x:DataType="vm:ItemModel">
                     <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
                     <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
-                    <Setter Property="flex:FlexPanel.FlexShrink" Value="{Binding FlexShink}" />
-                    <Setter Property="flex:FlexPanel.FlexGrow" Value="{Binding FlexGrow}" />
+                    <Setter Property="flex:FlexPanel.Shrink" Value="{Binding FlexShink}" />
+                    <Setter Property="flex:FlexPanel.Grow" Value="{Binding FlexGrow}" />
                     <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                 </Style>
             </ItemsControl.Styles>
@@ -158,8 +158,8 @@
                     <Style Selector="ListBoxItem" x:DataType="vm:ItemModel">
                         <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
                         <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
-                        <Setter Property="flex:FlexPanel.FlexShrink" Value="{Binding FlexShink}" />
-                        <Setter Property="flex:FlexPanel.FlexGrow" Value="{Binding FlexGrow}" />
+                        <Setter Property="flex:FlexPanel.Shrink" Value="{Binding FlexShink}" />
+                        <Setter Property="flex:FlexPanel.Grow" Value="{Binding FlexGrow}" />
                         <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                     </Style>
                 </ItemsRepeater.Styles>
