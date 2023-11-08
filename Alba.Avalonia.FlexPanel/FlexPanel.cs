@@ -27,13 +27,13 @@ public sealed partial class FlexPanel : Panel
     public static readonly StyledProperty<FlexDirection> DirectionProperty =
         AvaloniaProperty.Register<FlexPanel, FlexDirection>(nameof(Direction), FlexDirection.Row);
     public static readonly StyledProperty<FlexWrap> WrapProperty =
-        AvaloniaProperty.Register<FlexPanel, FlexWrap>(nameof(Wrap), default);
+        AvaloniaProperty.Register<FlexPanel, FlexWrap>(nameof(Wrap), FlexWrap.NoWrap);
     public static readonly StyledProperty<FlexContentJustify> JustifyContentProperty =
         AvaloniaProperty.Register<FlexPanel, FlexContentJustify>(nameof(JustifyContent), FlexContentJustify.FlexStart);
     public static readonly StyledProperty<FlexItemsAlignment> AlignItemsProperty =
-        AvaloniaProperty.Register<FlexPanel, FlexItemsAlignment>(nameof(AlignItems), FlexItemsAlignment.FlexStart);
+        AvaloniaProperty.Register<FlexPanel, FlexItemsAlignment>(nameof(AlignItems), FlexItemsAlignment.Stretch);
     public static readonly StyledProperty<FlexContentAlignment> AlignContentProperty =
-        AvaloniaProperty.Register<FlexPanel, FlexContentAlignment>(nameof(AlignContent), FlexContentAlignment.FlexStart);
+        AvaloniaProperty.Register<FlexPanel, FlexContentAlignment>(nameof(AlignContent), FlexContentAlignment.Stretch);
 
     static FlexPanel()
     {
@@ -213,6 +213,14 @@ public sealed partial class FlexPanel : Panel
                     accumulatedV = flexWrap == FlexWrap.WrapReverse ? uvFinalSize.V - curLineSizeArr[0].V - freeItemV : freeItemV;
                 }
                 break;
+            case FlexContentAlignment.SpaceEvenly:
+                if (_lineCount > 1) {
+                    freeItemV = freeV / (_lineCount + 1);
+                    for (var i = 0; i < _lineCount - 1; i++)
+                        lineFreeVArr[i] = freeItemV;
+                    accumulatedV = flexWrap == FlexWrap.WrapReverse ? uvFinalSize.V - curLineSizeArr[0].V - freeItemV : freeItemV;
+                }
+                break;
         }
 
         // clear status
@@ -304,6 +312,7 @@ public sealed partial class FlexPanel : Panel
                 FlexContentJustify.FlexStart => lineInfo.LineU,
                 FlexContentJustify.SpaceBetween => lineInfo.LineU,
                 FlexContentJustify.SpaceAround => lineInfo.LineU,
+                FlexContentJustify.SpaceEvenly => lineInfo.LineU,
                 FlexContentJustify.FlexEnd => lineInfo.ItemsU,
                 FlexContentJustify.Center => (lineInfo.LineU + lineInfo.ItemsU) * 0.5,
                 _ => u,
@@ -388,6 +397,12 @@ public sealed partial class FlexPanel : Panel
                 offsetUArr[0] = freeItemU;
                 for (var i = 1; i < itemCount; i++)
                     offsetUArr[i] = freeItemU * 2;
+            }
+            else if (justifyContent == FlexContentJustify.SpaceEvenly) {
+                var freeItemU = lineFreeU / (itemCount + 1);
+                offsetUArr[0] = freeItemU;
+                for (var i = 1; i < itemCount; i++)
+                    offsetUArr[i] = freeItemU;
             }
         }
 
@@ -525,8 +540,7 @@ public enum FlexContentAlignment
     Center,
     SpaceBetween,
     SpaceAround,
-    // TODO
-    //SpaceEvenly,
+    SpaceEvenly,
 }
 
 public enum FlexContentJustify
@@ -536,8 +550,7 @@ public enum FlexContentJustify
     Center,
     SpaceBetween,
     SpaceAround,
-    // TODO
-    //SpaceEvenly,
+    SpaceEvenly,
 }
 
 public enum FlexDirection
@@ -550,11 +563,11 @@ public enum FlexDirection
 
 public enum FlexItemAlignment
 {
-    Auto,
+    Auto = -1,
+    Stretch,
     FlexStart,
     FlexEnd,
     Center,
-    Stretch,
 }
 
 public enum FlexItemsAlignment

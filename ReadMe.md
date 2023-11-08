@@ -6,9 +6,9 @@ Panel implementing CSS-like flexbox for Avalonia 11.
 
 Flexbox features:
 * direction: row, column, row reverse, column reverse
-* flex-wrap: nowrap, wrap, wrap reverse
+* flex-wrap: nowrap, wrap, wrap-reverse
 * align-items, align-self: flex-start, flex-end, center, stretch
-* align-content, justify-content: flex-start, flex-end, center, space-between, space-around
+* align-content, justify-content: flex-start, flex-end, center, space-between, space-around, space-evenly
 * flex-grow, flex-shrink, flex-basis
 * order
 
@@ -16,13 +16,13 @@ Flexbox features:
 
 * [jp2masa/Avalonia.Flexbox](https://github.com/jp2masa/Avalonia.Flexbox) (alternative implementation):
     * Advantages:
-        * Supports: FlexLayout, row-gap, column-gap, space-evenly
+        * Supports: FlexLayout, row-gap, column-gap
     * Disadvantages:
         * Doesn't support: Avalonia 11, flex-grow, flex-shrink, flex-basis
 
 * [dotNevereverlie/Avalonia.FlexPanel](https://github.com/dotNevereverlie/Avalonia.FlexPanel) (alternative port):
     * Disadvantages:
-        * Doesn't support: Avalonia 11
+        * Doesn't support: Avalonia 11, space-evenly
         * Severe bugs
 
 ## Acknowledgements
