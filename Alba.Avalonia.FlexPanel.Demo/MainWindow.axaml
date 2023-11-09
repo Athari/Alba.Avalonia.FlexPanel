@@ -1,18 +1,17 @@
 ﻿<Window x:Class="Alba.Avalonia.FlexPanel.Demo.MainWindow"
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:Alba.Avalonia.FlexPanel.Demo.ViewModels"
-        xmlns:conv="clr-namespace:Alba.Avalonia.FlexPanel.Demo.Converters"
-        xmlns:flex="clr-namespace:Alba.Avalonia.FlexPanel;assembly=Alba.Avalonia.FlexPanel"
-        x:DataType="vm:MainModel"
+        xmlns:alba="urn:alba:avalonia"
+        xmlns:demo="urn:alba:avalonia:demo"
+        x:DataType="demo:MainModel"
         MinWidth="320"
         MinHeight="240"
         Icon="Assets/AvaloniaLogo.ico"
-        Title="Avalonia.Flexbox Demo">
+        Title="Alba.Avalonia.FlexPanel Demo">
     <Window.Resources>
-        <conv:NumberToThicknessConverter x:Key="NumberToThicknessConverter" />
+        <demo:NumberToThicknessConverter x:Key="NumberToThicknessConverter" />
         <DataTemplate x:Key="ItemTemplate"
-                x:DataType="vm:ItemModel">
+                x:DataType="demo:ItemModel">
             <ListBoxItem Padding="{Binding Value, Converter={StaticResource NumberToThicknessConverter}}"
                     IsSelected="{Binding IsSelected}"
                     Gestures.Tapped="OnItemTapped">
@@ -47,10 +46,10 @@
         <ScrollViewer DockPanel.Dock="Left" HorizontalScrollBarVisibility="Disabled" Padding="0,0,16,0" MinWidth="200">
             <StackPanel Spacing="16">
                 <TextBlock FontSize="16" Text="Properties" />
-                <flex:FlexPanel HorizontalAlignment="Left">
+                <alba:FlexPanel HorizontalAlignment="Left">
                     <RadioButton IsChecked="{Binding IsItemsControl}" Content="ItemsControl" />
                     <RadioButton IsChecked="{Binding IsItemsRepeater}" Content="ItemsRepeater" />
-                </flex:FlexPanel>
+                </alba:FlexPanel>
                 <StackPanel Spacing="8">
                     <TextBlock Text="flex-direction:" />
                     <ComboBox ItemsSource="{Binding DirectionValues}" SelectedItem="{Binding Direction}" />
@@ -120,17 +119,17 @@
                     ItemsSource="{Binding Numbers}"
                     ItemTemplate="{StaticResource ItemTemplate}">
                 <ItemsControl.Styles>
-                    <Style Selector="ContentPresenter" x:DataType="vm:ItemModel">
-                        <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
-                        <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
-                        <Setter Property="flex:FlexPanel.Shrink" Value="{Binding FlexShink}" />
-                        <Setter Property="flex:FlexPanel.Grow" Value="{Binding FlexGrow}" />
+                    <Style Selector="ContentPresenter" x:DataType="demo:ItemModel">
+                        <Setter Property="alba:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
+                        <Setter Property="alba:FlexPanel.Order" Value="{Binding Order}" />
+                        <Setter Property="alba:FlexPanel.Shrink" Value="{Binding FlexShink}" />
+                        <Setter Property="alba:FlexPanel.Grow" Value="{Binding FlexGrow}" />
                         <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                     </Style>
                 </ItemsControl.Styles>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <flex:FlexPanel HorizontalAlignment="Stretch"
+                        <alba:FlexPanel HorizontalAlignment="Stretch"
                                 Direction="{Binding Direction}"
                                 Wrap="{Binding Wrap}"
                                 JustifyContent="{Binding JustifyContent}"
@@ -147,23 +146,23 @@
                 <ItemsRepeater ItemsSource="{Binding Numbers}"
                         ItemTemplate="{StaticResource ItemTemplate}">
                     <ItemsRepeater.Styles>
-                        <Style Selector="ListBoxItem" x:DataType="vm:ItemModel">
-                            <Setter Property="flex:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
-                            <Setter Property="flex:FlexPanel.Order" Value="{Binding Order}" />
-                            <Setter Property="flex:FlexPanel.Shrink" Value="{Binding FlexShink}" />
-                            <Setter Property="flex:FlexPanel.Grow" Value="{Binding FlexGrow}" />
+                        <Style Selector="ListBoxItem" x:DataType="demo:ItemModel">
+                            <Setter Property="alba:FlexPanel.AlignSelf" Value="{Binding AlignSelf}" />
+                            <Setter Property="alba:FlexPanel.Order" Value="{Binding Order}" />
+                            <Setter Property="alba:FlexPanel.Shrink" Value="{Binding FlexShink}" />
+                            <Setter Property="alba:FlexPanel.Grow" Value="{Binding FlexGrow}" />
                             <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                         </Style>
                     </ItemsRepeater.Styles>
                     <!--<ItemsRepeater.Layout>
-                    <flex:FlexLayout Direction="{Binding Direction}"
-                            JustifyContent="{Binding JustifyContent}"
-                            AlignItems="{Binding AlignItems}"
-                            AlignContent="{Binding AlignContent}"
-                            Wrap="{Binding Wrap}"
-                            ColumnSpacing="{Binding ColumnSpacing}"
-                            RowSpacing="{Binding RowSpacing}" />
-                </ItemsRepeater.Layout>-->
+                        <alba:FlexLayout Direction="{Binding Direction}"
+                                JustifyContent="{Binding JustifyContent}"
+                                AlignItems="{Binding AlignItems}"
+                                AlignContent="{Binding AlignContent}"
+                                Wrap="{Binding Wrap}"
+                                ColumnSpacing="{Binding ColumnSpacing}"
+                                RowSpacing="{Binding RowSpacing}" />
+                    </ItemsRepeater.Layout>-->
                 </ItemsRepeater>
             </Border>
         </Grid>

@@ -9,7 +9,7 @@ Panel implementing CSS-like flexbox for Avalonia 11.
 * [**GitHub repository**](https://github.com/Athari/Alba.Avalonia.FlexPanel)
 * [**NuGet package**](https://www.nuget.org/packages/Alba.Avalonia.FlexPanel)
 <!-- -->
-    PM> Install-Package Alba.Avalonia.FlexPanel
+    PM> dotnet add package Alba.Avalonia.FlexPanel
 
 ## Features
 
@@ -31,7 +31,7 @@ Flexbox features:
 
 * [dotNevereverlie/Avalonia.FlexPanel](https://github.com/dotNevereverlie/Avalonia.FlexPanel) (alternative port):
     * Disadvantages:
-        * Doesn't support: Avalonia 11, space-evenly
+        * Doesn't support: Avalonia 11, row-gap, column-gap, space-evenly
         * Severe bugs
 
 ## Acknowledgements
