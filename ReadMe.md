@@ -18,10 +18,33 @@ Flexbox features:
 * flex-wrap: nowrap, wrap, wrap-reverse
 * align-items, align-self: flex-start, flex-end, center, stretch
 * align-content, justify-content: flex-start, flex-end, center, space-between, space-around, space-evenly
-* flex-grow, flex-shrink, flex-basis, order
+* flex-basis: content, length
+* flex-grow, flex-shrink, order
 * row-gap, column-gap
 
+## Important
+
+Before using this library, make sure [AvaloniaUI](https://github.com/AvaloniaUI/Avalonia) or [AvaloniaUI Labs](https://github.com/AvaloniaUI/Avalonia.Labs) don't include a more fully-featured implementation of FlexPanel yet. Currently they don't, but this ReadMe isn't guaranteed to be up to date. Refer to the list below for a comparison of the currently implemented features.
+
 ## Alternatives
+
+* [AvaloniaUI/Avalonia.Labs (pull 45)](https://github.com/AvaloniaUI/Avalonia.Labs/pull/45) (modification of jp2masa's implementation):
+    * Advantages:
+        * Supports:
+            * flex-basis: percent
+            * margin:auto behavior on non-stretch alignment
+            * partial main axis free space distribution
+        * Fork of offical AvaloniaUI labs
+        * Less bugs, better compatibility with the Flexbox standard
+    * Disadvantages:
+        * No NuGet package
+
+* [AvaloniaUI/Avalonia.Labs](https://github.com/AvaloniaUI/Avalonia.Labs) (migrated jp2masa's implementation):
+    * Advantages:
+        * Offical AvaloniaUI labs
+    * Disadvantages:
+        * Doesn't support: flex-grow, flex-shrink, flex-basis
+        * Non-standard calculation of gaps, alignment etc.
 
 * [jp2masa/Avalonia.Flexbox](https://github.com/jp2masa/Avalonia.Flexbox) (alternative implementation):
     * Advantages:
