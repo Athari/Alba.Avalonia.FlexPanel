@@ -1,5 +1,11 @@
 # Alba.Avalonia.FlexPanel
 
+> [!IMPORTANT]
+>
+> FlexPanel has been merged into official [AvaloniaUI Labs](https://github.com/AvaloniaUI/Avalonia.Labs):
+>
+> * AvaloniaUI/Avalonia.Labs#45
+
 [![NuGet release version](https://img.shields.io/nuget/v/Alba.Avalonia.FlexPanel.svg?label=release&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMpJREFUeNqUkbENwjAQRY8ovZkgG5AJYALS0GaDMAGeACYIE7ABtFSZgEyAy3TegG/pR7IuToCTXuHTvTufvTo8h42InIAFTn6MDARxCwr5I3JOuYAuyhdsqCPU%2BFHslHQD9cKwI7jmKtlSsrz%2BPiGGGhOLBjSgAg/m3jO7nzMlSrSbiXLJV510A3dOi0X/TRTuNko9KMGaayyKcVSUhbtbLfoZ0SX%2BciL2CbFR5/DPXl91l5jcsjg0eHH3UouecqfyNRsIH8p9BBgAANInlRmoOxQAAAAASUVORK5CYII=)](https://www.nuget.org/packages/Alba.Avalonia.FlexPanel)
 [![AppVeyor build master](https://img.shields.io/appveyor/ci/athari/alba-avalonia-flexpanel/master.svg?logo=appveyor)](https://ci.appveyor.com/project/Athari/alba-avalonia-flexpanel/branch/master)
 [![GitHub release version](https://img.shields.io/github/release/Athari/Alba.Avalonia.FlexPanel.svg?logo=github)](https://github.com/Athari/Alba.Avalonia.FlexPanel/releases)
@@ -21,10 +27,6 @@ Flexbox features:
 * flex-basis: content, length
 * flex-grow, flex-shrink, order
 * row-gap, column-gap
-
-## Important
-
-Before using this library, make sure [AvaloniaUI](https://github.com/AvaloniaUI/Avalonia) or [AvaloniaUI Labs](https://github.com/AvaloniaUI/Avalonia.Labs) don't include a more fully-featured implementation of FlexPanel yet. Currently they don't, but this ReadMe isn't guaranteed to be up to date. Refer to the list below for a comparison of the currently implemented features.
 
 ## Alternatives
 
